@@ -29,7 +29,7 @@ public class ReadExcelProperty {
 		String computername = null;
 		try {
 			computername = InetAddress.getLocalHost().getHostName();
-			System.out.println(computername);
+			
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -50,6 +50,7 @@ public class ReadExcelProperty {
 		System.out.println("Number of sessions daily per machine:"+value1);
 		System.out.println("Session login credentials Email:"+value2);
 		System.out.println("Session login credentials password:"+value3);
+		System.out.println("ReportT ype:"+value4);
 		System.out.println("Number of reports daily"+value11);
 		System.out.println("Account Time-Zone"+value5);
 		System.out.println("OS:"+value6);
