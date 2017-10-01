@@ -2,6 +2,9 @@ package config;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -23,19 +26,27 @@ public class ReadExcelProperty {
 	
 	
 	public static void main(String[] args) {
+		String computername = null;
+		try {
+			computername = InetAddress.getLocalHost().getHostName();
+			System.out.println(computername);
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//ReadExcelProperty rp =new ReadExcelProperty("C:\\Users\\anjan\\Desktop\\newfile\\seleniumFramework\\bin\\testscripts\\datatables\\TC_01.xlsx");
 		ReadExcelProperty rp =new ReadExcelProperty();
-		String value1 = rp.getProperty("Numberofsessions","MC_1");
-		String value2 = rp.getProperty("Email","MC_1");
-		String value3 = rp.getProperty("Password","MC_1");
-		String value4 = rp.getProperty("ReportType","MC_1");
-		String value5 = rp.getProperty("AccountTimeZone","MC_1");
-		String value6 = rp.getProperty("OS","MC_1");
-		String value7 = rp.getProperty("FrequencyofDataGrab","MC_1");
-		String value8 = rp.getProperty("Timeframeofreport","MC_1");
-		String value9 = rp.getProperty("TimeofDataGrab","MC_1");
-		String value10 = rp.getProperty("Browsertoopen","MC_1");
-		String value11 = rp.getProperty("Numberofreports","MC_1");
+		String value1 = rp.getProperty("Numberofsessions",computername);
+		String value2 = rp.getProperty("Email",computername);
+		String value3 = rp.getProperty("Password",computername);
+		String value4 = rp.getProperty("ReportType",computername);
+		String value5 = rp.getProperty("AccountTimeZone",computername);
+		String value6 = rp.getProperty("OS",computername);
+		String value7 = rp.getProperty("FrequencyofDataGrab",computername);
+		String value8 = rp.getProperty("Timeframeofreport",computername);
+		String value9 = rp.getProperty("TimeofDataGrab",computername);
+		String value10 = rp.getProperty("Browsertoopen",computername);
+		String value11 = rp.getProperty("Numberofreports",computername);
 		System.out.println("Number of sessions daily per machine:"+value1);
 		System.out.println("Session login credentials Email:"+value2);
 		System.out.println("Session login credentials password:"+value3);
@@ -46,6 +57,9 @@ public class ReadExcelProperty {
 		System.out.println("Time-frame of report:"+value8);
 		System.out.println("Time of Data Grab:"+value9);
 		System.out.println("Browser to open:"+value10);
+		
+		
+		
 	}	
 	
 	
