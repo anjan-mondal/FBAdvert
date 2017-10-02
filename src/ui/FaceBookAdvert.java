@@ -84,6 +84,7 @@ public class FaceBookAdvert {
 		navigateToManageAdverts();
 		selectAdvertAccount();
 		driver.quit();
+		
 	}
 
 }
