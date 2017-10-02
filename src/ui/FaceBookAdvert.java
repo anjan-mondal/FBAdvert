@@ -54,7 +54,7 @@ public class FaceBookAdvert {
 	{
 		WebDriverWait wait = new WebDriverWait(driver, 60);
 		String advertAccountName = pv.readProperties("xpath.properties", "MANAGE_ADVERT_ACC_Name");
-		String advertAccountNameXPAth = advertAccountName.replaceAll("#####", advertAccountName);
+		String advertAccountNameXPAth = advertAccountName.replace("#####", rp.getProperty("AdvertAccountName",computername));
 		WebElement advertAccountName_element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(advertAccountNameXPAth)));
 		advertAccountName_element.click();	
 	}
