@@ -70,10 +70,11 @@ public class FaceBookAdvert {
 		String driverPath = System.getProperty("user.dir");
 		driverPath+=File.separator+"drivers"+File.separator;
 		System.out.println(driverPath);
-		ChromeOptions options = new ChromeOptions();
-		options.addArguments("--disable-notifications");
+		//ChromeOptions options = new ChromeOptions();
+		//options.addArguments("--disable-notifications");
 		System.setProperty("webdriver.chrome.driver", driverPath+"chromedriver.exe");
-		driver = new ChromeDriver(options);
+		
+		driver = new ChromeDriver(ExportCsv.csvExport());
 		
 		String URL = pv.readProperties("config.properties", "URL");
 		
