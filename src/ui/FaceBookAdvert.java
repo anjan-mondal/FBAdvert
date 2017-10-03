@@ -11,7 +11,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -59,7 +58,79 @@ public class FaceBookAdvert {
 		advertAccountName_element.click();	
 	}
 	
-	public static void main(String[] args) {
+	public static void processCSV() throws InterruptedException
+	{
+		WebDriverWait wait = new WebDriverWait(driver, 60);
+		String ReportType =  rp.getProperty("ReportType",computername);
+		String ReportTypeArr[] = ReportType.split(";");
+		
+		for(String i : ReportTypeArr)
+		{
+			String clickReportType = "//span[text()='" + i + "']";
+			WebElement clickReportType_element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(clickReportType)));
+			clickReportType_element.click();
+			selectDataColumn();
+			selectDateRange();
+			exportCSV();
+			Thread.sleep(15000);
+		}
+		
+	}
+	
+	public static void selectDataColumn() throws InterruptedException
+	{
+		WebDriverWait wait = new WebDriverWait(driver, 60);
+		String dataColumn = rp.getProperty("DataColumn",computername);
+		String dataColumnXPath = pv.readProperties("xpath.properties", "CLICK_COLUMNS");
+		WebElement dataColumnXPath_element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(dataColumnXPath)));
+		dataColumnXPath_element.click();
+
+		String dataColumnSelect = "//span[text()='" + dataColumn + "']";
+
+		WebElement dataColumnSelect_element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(dataColumnSelect)));
+		dataColumnSelect_element.click();
+	}
+	
+	public static void selectDateRange()
+	{
+		WebDriverWait wait = new WebDriverWait(driver, 60);
+		String dateRange = rp.getProperty("DateRange",computername);
+		String dateRangeXPath = pv.readProperties("xpath.properties", "DATE_COLUMNS");
+		String dateUpdateXPath = pv.readProperties("xpath.properties", "DATE_UPDATE");
+		WebElement dateRangeXPath_element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(dateRangeXPath)));
+		dateRangeXPath_element.click();
+		
+		String dateSelect = "//li[text()='" + dateRange + "']";
+		WebElement dateSelect_element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(dateSelect)));
+		dateSelect_element.click();
+		
+		WebElement dateUpdate_element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(dateUpdateXPath)));
+		dateUpdate_element.click();
+	}
+	
+	public static void exportCSV() throws InterruptedException
+	{
+		WebDriverWait wait = new WebDriverWait(driver, 60);
+
+		String exportXPath = pv.readProperties("xpath.properties", "EXPORT");
+		WebElement exportXPath_element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(exportXPath)));
+		exportXPath_element.click();
+		
+		String saveAsCSVXPath = pv.readProperties("xpath.properties", "SAVE_AS_CSV");
+		Thread.sleep(5000);
+		boolean clickRequired = driver.findElement(By.xpath(saveAsCSVXPath)).isSelected();
+		if(!clickRequired) {
+			WebElement saveAsCSVXPath_element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(saveAsCSVXPath)));
+			saveAsCSVXPath_element.click();
+		}
+		
+		
+		String exportBtnXPath = pv.readProperties("xpath.properties", "EXPORT_BTN_CSV");
+		WebElement exportBtnXPath_element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(exportBtnXPath)));
+		exportBtnXPath_element.click();	
+	}
+	
+	public static void main(String[] args) throws InterruptedException {
 		try {
 			computername = InetAddress.getLocalHost().getHostName();
 		} catch (UnknownHostException e) {
@@ -83,6 +154,7 @@ public class FaceBookAdvert {
 		loginToFacebook();
 		navigateToManageAdverts();
 		selectAdvertAccount();
+		processCSV();
 		driver.quit();
 		
 	}
