@@ -148,15 +148,18 @@ public class FaceBookAdvert {
 		driver = new ChromeDriver(ExportCsv.csvExport());
 		
 		String URL = pv.readProperties("config.properties", "URL");
-		
-		driver.navigate().to(URL);
-		driver.manage().window().maximize();
-		loginToFacebook();
-		navigateToManageAdverts();
-		selectAdvertAccount();
-		processCSV();
-		driver.quit();
-		
+		try{
+			driver.navigate().to(URL);
+			driver.manage().window().maximize();
+			loginToFacebook();
+			navigateToManageAdverts();
+			selectAdvertAccount();
+			processCSV();
+			driver.quit();
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+			driver.quit();
+		}
 	}
 
 }
