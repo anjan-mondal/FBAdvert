@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -28,6 +29,8 @@ public class ExportCsv {
 	 */
 	
 	public static ChromeOptions csvExport() {
+		
+		
 		PropertiesValue pv = new PropertiesValue();
 	    csvDownloadPath = pv.readProperties("config.properties", "csvDownloadPath");
 		// TODO Auto-generated method stub
@@ -44,6 +47,27 @@ public class ExportCsv {
 		return options;
 
 	}
+	
+	public static FirefoxProfile csvExportFireFox() {
+		
+		
+		PropertiesValue pv = new PropertiesValue();
+	    csvDownloadPath = pv.readProperties("config.properties", "csvDownloadPath");
+	    String downloadFilepath = createFloder();
+	    FirefoxProfile profile = new FirefoxProfile();
+	    profile.setPreference("dom.webnotifications.enabled", false);
+		profile.setPreference("browser.download.folderList", 2);
+		profile.setPreference("browser.download.dir", downloadFilepath);
+		profile.setPreference("browser.helperApps.neverAsk.saveToDisk", "text/csv");
+		profile.setPreference( "browser.download.manager.showWhenStarting", false );
+		profile.setPreference("browser.tabs.remote.autostart.2", false);
+		profile.setPreference("pdfjs.disabled", true);
+		
+		return profile;
+
+	}
+	
+	
 	
 	/**
 	 * Returns string  which is actually a report path where the actual csv file will be stored.

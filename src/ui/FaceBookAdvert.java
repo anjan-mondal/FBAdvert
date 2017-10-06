@@ -47,7 +47,12 @@ public class FaceBookAdvert {
 		
 		WebElement usermenu_element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(usermenu)));
 		usermenu_element.click();
-		
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		WebElement manageadvertslink_element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(manageadvertslink)));
 		manageadvertslink_element.click();
 	}
@@ -57,6 +62,12 @@ public class FaceBookAdvert {
 		WebDriverWait wait = new WebDriverWait(driver, 60);
 		String advertAccountName = pv.readProperties("xpath.properties", "MANAGE_ADVERT_ACC_Name");
 		String advertAccountNameXPAth = advertAccountName.replace("#####", rp.getProperty("AdvertAccountName",computername));
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		WebElement advertAccountName_element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(advertAccountNameXPAth)));
 		advertAccountName_element.click();	
 	}
@@ -157,11 +168,13 @@ public class FaceBookAdvert {
 		case "FIREFOX":
 			System.setProperty("webdriver.gecko.driver", driverPath+"geckodriver.exe");
 			FirefoxProfile ffprofile = new FirefoxProfile();
-			ffprofile.setPreference("dom.webnotifications.enabled", false);
+			
 			FirefoxOptions option = new FirefoxOptions();
-			option.setProfile(ffprofile);
+			option.setProfile(ExportCsv.csvExportFireFox());
 			driver = new FirefoxDriver(option);
 			break;
+			
+			
 			
 		}
 		
