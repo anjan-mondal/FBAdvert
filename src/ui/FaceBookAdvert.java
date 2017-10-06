@@ -11,6 +11,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -141,11 +144,32 @@ public class FaceBookAdvert {
 		String driverPath = System.getProperty("user.dir");
 		driverPath+=File.separator+"drivers"+File.separator;
 		System.out.println(driverPath);
+		
+		String browser = rp.getProperty("Browser",computername);
+		
+		switch(browser.toUpperCase()) {
+		
+		case "CHROME":
+			System.setProperty("webdriver.chrome.driver", driverPath+"chromedriver.exe");
+			driver = new ChromeDriver(ExportCsv.csvExport());
+			break;
+			
+		case "FIREFOX":
+			System.setProperty("webdriver.gecko.driver", driverPath+"geckodriver.exe");
+			FirefoxProfile ffprofile = new FirefoxProfile();
+			ffprofile.setPreference("dom.webnotifications.enabled", false);
+			FirefoxOptions option = new FirefoxOptions();
+			option.setProfile(ffprofile);
+			driver = new FirefoxDriver(option);
+			break;
+			
+		}
+		
 		//ChromeOptions options = new ChromeOptions();
 		//options.addArguments("--disable-notifications");
-		System.setProperty("webdriver.chrome.driver", driverPath+"chromedriver.exe");
+		//System.setProperty("webdriver.chrome.driver", driverPath+"chromedriver.exe");
 		
-		driver = new ChromeDriver(ExportCsv.csvExport());
+		//driver = new ChromeDriver(ExportCsv.csvExport());
 		
 		String URL = pv.readProperties("config.properties", "URL");
 		try{
