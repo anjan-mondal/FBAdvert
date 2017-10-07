@@ -14,8 +14,10 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.JavascriptExecutor;
 
 public class FaceBookAdvert {
 	
@@ -24,8 +26,57 @@ public class FaceBookAdvert {
 	static ReadExcelProperty rp =new ReadExcelProperty();
 	static String computername = null;
 	
+	public static boolean waitForJSandJQueryToLoad() {
+
+	    WebDriverWait wait = new WebDriverWait(driver, 60);
+
+	    // wait for jQuery to load
+	    ExpectedCondition<Boolean> jQueryLoad = new ExpectedCondition<Boolean>() {
+	      @Override
+	      public Boolean apply(WebDriver driver) {
+	        try {
+	          return ((Long)((JavascriptExecutor)driver).executeScript("return jQuery.active") == 0);
+	        }
+	        catch (Exception e) {
+	          // no jQuery present
+	          return true;
+	        }
+	      }
+	    };
+
+	    // wait for Javascript to load
+	    ExpectedCondition<Boolean> jsLoad = new ExpectedCondition<Boolean>() {
+	      @Override
+	      public Boolean apply(WebDriver driver) {
+	        return ((JavascriptExecutor)driver).executeScript("return document.readyState")
+	        .toString().equals("complete");
+	      }
+	    };
+
+	  return wait.until(jQueryLoad) && wait.until(jsLoad);
+	}
+	
+	public static void waitForPageToLoad()
+	{
+		String waitT = pv.readProperties("config.properties", "WaitTime");
+		int waitTime = Integer.parseInt(waitT);
+		System.out.print("Waiting for page to load: ");
+		while(waitForJSandJQueryToLoad() && waitTime > 0)
+		{
+			System.out.print(".");
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			waitTime--;
+		}
+		System.out.println("Page load complete");
+	}
+	
 	public static void loginToFacebook()
 	{
+		waitForPageToLoad();
 		WebDriverWait wait = new WebDriverWait(driver, 60);
 		String username = pv.readProperties("xpath.properties", "EMAIL");
 		String password = pv.readProperties("xpath.properties", "PASS");
@@ -41,6 +92,7 @@ public class FaceBookAdvert {
 	
 	public static void navigateToManageAdverts()
 	{
+		waitForPageToLoad();
 		WebDriverWait wait = new WebDriverWait(driver, 60);
 		String usermenu = pv.readProperties("xpath.properties", "FB_USER_MENU");
 		String manageadvertslink = pv.readProperties("xpath.properties", "MANAGE_ADVERTS");
@@ -59,6 +111,7 @@ public class FaceBookAdvert {
 	
 	public static void selectAdvertAccount()
 	{
+		waitForPageToLoad();
 		WebDriverWait wait = new WebDriverWait(driver, 60);
 		String advertAccountName = pv.readProperties("xpath.properties", "MANAGE_ADVERT_ACC_Name");
 		String advertAccountNameXPAth = advertAccountName.replace("#####", rp.getProperty("AdvertAccountName",computername));
@@ -74,6 +127,7 @@ public class FaceBookAdvert {
 	
 	public static void processCSV() throws InterruptedException
 	{
+		waitForPageToLoad();
 		WebDriverWait wait = new WebDriverWait(driver, 60);
 		String ReportType =  rp.getProperty("ReportType",computername);
 		String ReportTypeArr[] = ReportType.split(";");
@@ -93,6 +147,7 @@ public class FaceBookAdvert {
 	
 	public static void selectDataColumn() throws InterruptedException
 	{
+		waitForPageToLoad();
 		WebDriverWait wait = new WebDriverWait(driver, 60);
 		String dataColumn = rp.getProperty("DataColumn",computername);
 		String dataColumnXPath = pv.readProperties("xpath.properties", "CLICK_COLUMNS");
@@ -107,6 +162,7 @@ public class FaceBookAdvert {
 	
 	public static void selectDateRange()
 	{
+		waitForPageToLoad();
 		WebDriverWait wait = new WebDriverWait(driver, 60);
 		String dateRange = rp.getProperty("DateRange",computername);
 		String dateRangeXPath = pv.readProperties("xpath.properties", "DATE_COLUMNS");
@@ -124,6 +180,7 @@ public class FaceBookAdvert {
 	
 	public static void exportCSV() throws InterruptedException
 	{
+		waitForPageToLoad();
 		WebDriverWait wait = new WebDriverWait(driver, 60);
 
 		String exportXPath = pv.readProperties("xpath.properties", "EXPORT");
@@ -173,9 +230,6 @@ public class FaceBookAdvert {
 			option.setProfile(ExportCsv.csvExportFireFox());
 			driver = new FirefoxDriver(option);
 			break;
-			
-			
-			
 		}
 		
 		//ChromeOptions options = new ChromeOptions();
